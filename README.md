@@ -2,6 +2,7 @@
 Projeto: **SUPPORT VECTOR MACHINES PARA CLASSIFICAÇÃO DE QUALIDADE EM FRUTOS**
 
 Orientador: [Warley Gramacho]
+
 Orientando: [Jonatha Varjão]
 
 
