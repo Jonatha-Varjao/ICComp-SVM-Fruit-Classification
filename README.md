@@ -7,17 +7,28 @@ Orientando: [Jonatha Varjão]
 
 
 ### Instalação
-Instale as dependências
+Crie o ambiente virtual
+```sh
+$ virtualenv -p python3.6 nomeDoAmbiente
+```
 
-> pip install -r requirement.txt
-
-Após instalação das dependências...
+Ative o ambiente virtual
 
 ```sh
 $ cd <VirtualEnv_Folder>
 $ source bin/active
 (VirtualEnv_Folder)$ python3 *.py
 ```
+
+Instale as dependências:
+
+```sh
+(VirtualEnv_Folder)$ pip install -r requirements.txt
+```
+- numpy
+- scikit-learn
+- scipy
+
 
 
 ### Agradecimentos
