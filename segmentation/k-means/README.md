@@ -1,11 +1,13 @@
 ## K-means Segmentation
 
-Segmentação usando o método k-means.
+Segmentação usando o método k-means (Redução no espaço de cor da imagem ).
 
 
 ###### TO_DO
 
-- Rotina para segmentar as imagens contidas em uma dada pasta.
+- Rotina para segmentar as imagens contidas em uma dada pasta. [FEITO]
+- Extrair somente a imagem da fruta do quadro principal.
+- Testar a Classificação com a SVM.
 
 
 [Warley Gramacho]: <http://lattes.cnpq.br/2536790818552672>
