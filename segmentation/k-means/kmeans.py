@@ -17,7 +17,6 @@ class Segment:
 
         # Método para segmentar a imagem usando K-means.
     def kmeans(self,image):
-        #image            =   cv2.GaussianBlur(image,(3,5),0)
         vectorized       =   image.reshape(-1,3)
         vectorized       =   np.float32(vectorized) 
         criteria         =   (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 10, 1.0)
@@ -44,20 +43,7 @@ class Segment:
                 # for cluster in range(seg.segments):
                 #     result=seg.extractComponent(image, label, cluster)
                 #     cv2.imwrite("Component_"+str(cluster)+"_"+imageString[0], result)
-        return seg
-
-if __name__ == "__main__":
-    # HARD-CODE dos paths das imagens
-    # Trocar o path para a máquina local
-    manga            = '/home/jonatha/Documentos/PIBICWARLEY/ICComp-SVM-Fruit-Classification/database/Manga/'
-    laranja          = '/home/jonatha/Documentos/PIBICWARLEY/ICComp-SVM-Fruit-Classification/database/LaranjaTangerina/'
-    laranjaInfectada = '/home/jonatha/Documentos/PIBICWARLEY/ICComp-SVM-Fruit-Classification/database/LaranjaInfectada/'
-
-    seg              = Segment()
-
-    #seg.segmentFolder(manga)
-    #seg.segmentFolder(laranja)
-    seg.segmentFolder(laranjaInfectada)
+        return result
 
 
 #TODO   1: Refatorar o código e otimizar o tempo.
