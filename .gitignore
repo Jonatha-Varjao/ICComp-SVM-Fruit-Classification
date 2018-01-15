@@ -1,3 +1,6 @@
 database/
 *.jpg
 *.png
+*.JPG
+*.PNG
+__pycache__/
