@@ -26,14 +26,14 @@ class Segment:
         return label.reshape((image.shape[0], image.shape[1])), segmented_image.astype(np.uint8)
 
         # Extração do K da imagem segmentada.
-    def extractComponent(self,image,label_image,label):
+    def extract_component(self,image,label_image,label):
         component                     = np.zeros(image.shape, np.uint8)
         component[label_image==label] = image[label_image==label]
         return component
         
-        # Método para Segmentar imagens em um dado path
-    def segmentFolder(self, folderName):
-        for filename in os.listdir(folderName):
+        # Segmentação da pasta contendo as imagens pre processadas
+    def segment_folder(self, folderName):
+        for filename in os.listdir(folderName+"Extracted_Images/"):
             if '.' in filename:
                 print(filename)
                 image = cv2.imread(folderName+filename)  
