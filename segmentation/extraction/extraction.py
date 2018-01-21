@@ -18,11 +18,26 @@ class Extract:
         x0, y0, z0 = coords.min(axis=0)
         x1, y1, z1 = coords.max(axis=0) + 1   # fatias são exclusivas no topo
         # Obter o conteúdo da caixa delimitadora.
-        cropped = img[x0:x1, y0:y1, z0:z1]
+        print(x0,x1,y0,y1,z0,z1)
+        
+        # Aumentado um pouco a caixa delimitadora ( devido ao jseg nao fechar as regiões em algumas imagens )
+        x0_maior = x0 - 25
+        x1_maior = x1 + 25
+        y0_maior = y0 - 25
+        y1_maior = y1 + 25
+        
+        if x0_maior < 0:
+            x0_maior = 0
+        if y0_maior < 0:
+            y0_maior = 0
+        
+        print(img.shape)
+        print(x0,x1,y0,y1,z0,z1)
+        cropped = img[x0_maior:x1_maior, y0_maior:y1_maior, z0:z1]
         return cropped
 
 
-    def getSobel (self,channel):
+    def getSobel(self,channel):
 
         sobelx = cv2.Sobel(channel, cv2.CV_16S, 1, 0, borderType=cv2.BORDER_REPLICATE)
         sobely = cv2.Sobel(channel, cv2.CV_16S, 0, 1, borderType=cv2.BORDER_REPLICATE)
@@ -30,7 +45,7 @@ class Extract:
 
         return sobel;
 
-    def findSignificantContours (self,img, sobel_8u):
+    def findSignificantContours(self, img, sobel_8u):
         image, contours, heirarchy = cv2.findContours(sobel_8u, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
         # Encontre contornos de nível 1
@@ -55,7 +70,7 @@ class Extract:
         significant.sort(key=lambda x: x[1])
         return [x[0] for x in significant];
 
-    def extract_countor (self, path):
+    def extract_countor(self, path):
         img = cv2.imread(path)
         blurred = cv2.GaussianBlur(img, (3, 3), 0) # Filtro Gaussiano
         # Operador Sobel
@@ -92,7 +107,7 @@ class Extract:
                 image = self.crop_image(self.extract_countor(folderName+filename))
                 cv2.imwrite(folderName + "Extracted_Images/" + filename, image)
         return image
-
+    
 
 #TODO: Criar uma classe e aglomerar as funções [FEITO]
 #TODO: Criar método para acessar um path, e extrair o objeto dela [FEITO]
