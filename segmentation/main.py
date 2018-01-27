@@ -27,19 +27,28 @@ if __name__ == "__main__":
     
     # PRE-PROCESSAMENTO
     # Extração das frutas nas imagens
-    #extraction.extract_folder(manga)
-    #extraction.extract_folder(laranja)
-    #extraction.extract_folder(laranjaInfectada)
-    #extraction.extract_folder(macaRoyal)
-    #extraction.extract_folder(macaVerde)
+    # extraction.extract_folder(manga)
+    # extraction.extract_folder(laranja)
+    # extraction.extract_folder(laranjaInfectada)
+    # extraction.extract_folder(macaRoyal)
+    # extraction.extract_folder(macaVerde)
 
     
     # PROCESSAMENTO DAS IMAGENS (JSEG)
-    jseg.segment_folder(macaRoyal)
+    #jseg.segment_folder(macaRoyal)
+    #jseg.segment_folder(laranjaInfectada)
+    #jseg.segment_folder(laranja)
+    #jseg.segment_folder(manga)
+    #jseg.segment_folder(macaVerde)
+
+
+    # PROCESSAMENTO DAS IMAGENS (gPb)
     
-    
+
     # PROCESSAMENTO DAS IMAGENS (K-MEANS)
     #seg.segment_folder(manga)
     #seg.segment_folder(laranja)
     #seg.segment_folder(laranjaInfectada)
+    #seg.segment_folder(macaRoyal)
+    #seg.segment_folder(macaVerde)
 

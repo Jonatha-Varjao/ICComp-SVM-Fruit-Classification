@@ -36,8 +36,8 @@ class Segment:
         for filename in os.listdir(folderName+"Extracted_Images/"):
             if '.' in filename:
                 print(filename)
-                image = cv2.imread(folderName+filename)  
-                label,result= seg.kmeans(image)
+                image = cv2.imread(folderName+"Extracted_Images/"+filename)  
+                label,result= self.kmeans(image)
                 #cv2.imshow("segmenteda",result)
                 cv2.imwrite(folderName + "Segment_Images/kmeans/Kmeans_" + filename, result)
                 # for cluster in range(seg.segments):

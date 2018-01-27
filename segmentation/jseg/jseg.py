@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 import cv2
-import numpy as np
-import sys
 import os
 from subprocess import call
 
@@ -19,10 +17,9 @@ class Jseg:
         for filename in os.listdir(folderName+"Extracted_Images/"):
             if '.' in filename:
                 print(filename)
-                image = cv2.imread(folderName+filename)
+                image = cv2.imread(folderName+"Extracted_Images/"+filename)
                 print(str(image.shape[0]),image.shape[1])
-                call(["wine","jseg/segwin.exe","-i",folderName+filename,"-t","6","-s",str(image.shape[0]), str(image.shape[1]),"-o", folderName+"Segment_Images/jseg/"+"Jseg_"+filename, "1"])
-        pass
+                call(["wine","jseg/segwin.exe","-i",folderName+"Extracted_Images/"+filename,"-t","6","-s",str(image.shape[0]), str(image.shape[1]),"-o", folderName+"Segment_Images/jseg/"+"Jseg_"+filename, "1"])
 
 # FIX: AUMENTAR A ÁREA DA IMAGEM CROPADA PARA MELHORAR A SEGMENTAÇÃO USANDO JSEG [FEITO]
 
