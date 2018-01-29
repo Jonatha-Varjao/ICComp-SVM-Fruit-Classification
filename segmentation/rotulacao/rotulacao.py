@@ -6,10 +6,12 @@ from PIL import Image, ImageDraw
 import sys
 from itertools import product
 from ufarray import *
+import cv2
 
 
 
 class Rotulacao:
+    
     def binarizar_imagem(self, img):
         new_image = Image.new("RGB",(img.size[0],img.size[1]))
         for i in range(img.size[0]):
@@ -187,9 +189,10 @@ class Rotulacao:
         return saida_img
     
     # ANALISO MINHA 8-VIZINHANCA
-    # SE TENHO 5 PIXEIS VIZINHOS > 5, PEGO O DA DIREITA SENÃO FOR PRETO, O DE CIMA SE FOR
-    # TESTAR MAIS TARDE - GERANDO NOVA IMAGEM E APLICANDO OS TESTES NA IMAGEM RECEBIDA COMO PARAMETRO
+    # SE TENHO 5 PIXEIS VIZINHOS > 5, PEGO O DA DIREITA SENÃO FOR PRETO E VOU ANALISANDO MINHA 8-VIZINHANCA
+
     def remover_linha_branca(self, img):
+        new_image = img.copy()
         qtd_Pixels = 0
         for i in range(1, img.size[0]-1):
             for j in range(1,img.size[1]-1):
@@ -220,26 +223,44 @@ class Rotulacao:
                         qtd_Pixels += 1
                     if ((p9[0] + p9[1] + p9[2])/3) > 5:
                         qtd_Pixels += 1
-                    print(qtd_Pixels)
+                    #print(qtd_Pixels)
                     if qtd_Pixels >= 3:
-                        print("pixel preto na area colorida")
-                        pixelDireita = img.getpixel((i,j+1))
-                        if ((pixelDireita[0] + pixelDireita[1] + pixelDireita[2]) / 3) < 5:
-                            img.putpixel((i,j), img.getpixel((i-1,j)))
-                        else:
-                            img.putpixel((i,j), img.getpixel((i,j+1)))
+                        #print("pixel preto na area colorida")
+                        #pixel direita
+                        if ((p6[0] + p6[1] + p6[2]) / 3) > 5:
+                            new_image.putpixel((i,j), img.getpixel((i,j+1)))
+                        elif ((p7[0] + p7[1] + p7[2])/3) > 5 :
+                            new_image.putpixel((i,j), img.getpixel((i+1,j-1)))
+                        elif ((p8[0] + p8[1] + p8[2])/3) > 5:
+                            new_image.putpixel((i,j), img.getpixel((i+1,j)))
+                        elif ((p9[0] + p9[1] + p9[2])/3) > 5:
+                            new_image.putpixel((i,j), img.getpixel((i+1,j+1)))
+                        elif ((p1[0] + p1[1] + p1[2])/3) > 5:
+                            new_image.putpixel((i,j), img.getpixel((i-1,j-1)))
+                        elif ((p2[0] + p2[1] + p2[2])/3) > 5:
+                            new_image.putpixel((i,j), img.getpixel((i-1,j)))
+                        elif ((p3[0] + p3[1] + p3[2])/3) > 5:
+                            new_image.putpixel((i,j), img.getpixel((i-1,j+1)))
                         
                         qtd_Pixels = 0
                     
                     else:
                         qtd_Pixels = 0
         
-        return img
+        return new_image
     
+    def extract_folder(self, folderName):
+        for filename in os.listdir(folderName+"Segment_Images/jseg"):
+            if '.' in filename:
+                print(filename)
+                imgOriginal = Image.open(folderName+filename)
+                image = self.remover_linha_branca(self.achar_pintar_area(self.binarizar_imagem(imgOriginal), imgOriginal))
+                cv2.imwrite(folderName + "Segment_Images/jseg/colorida" + filename, image)
+        return image
+
 def main():
     
     obj = Rotulacao()
-
     imgOriginal = Image.open(sys.argv[1])
     #img.show()
     img_teste = obj.remover_linha_branca(obj.achar_pintar_area(obj.binarizar_imagem(imgOriginal), imgOriginal))
