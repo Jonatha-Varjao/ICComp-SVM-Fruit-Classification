@@ -250,15 +250,23 @@ class Rotulacao:
         return new_image
     
     # EXTRACAO FOLDER(1 - JSEG , 2 - GPB)
-    def extract_folder(self, folderName):
-        for filename in os.listdir(folderName+"Segment_Images/jseg"):
-            if '.' in filename:
-                print(filename)
-                imgOriginal = Image.open(folderName+"Segment_Images/jseg/"+filename)
-                image = self.remover_linha_branca(self.achar_pintar_area(self.binarizar_imagem(imgOriginal), imgOriginal))
-                image.save(folderName + "Segment_Images/jseg/colorida/" + filename)
-        return image
-
+    def extract_folder(self, folderName, metodo):
+        if metodo == 1:
+            for filename in os.listdir(folderName+"Segment_Images/jseg"):
+                if '.' in filename:
+                    print(filename)
+                    imgOriginal = Image.open(folderName+"Segment_Images/jseg/"+filename)
+                    image = self.remover_linha_branca(self.achar_pintar_area(self.binarizar_imagem(imgOriginal), imgOriginal))
+                    image.save(folderName + "Segment_Images/jseg/colorida/" + filename)
+        elif metodo == 2:
+            for filename in os.listdir(folderName+"Segment_Images/gPb"):
+                if '.' in filename:
+                    print(filename)
+                    imgOriginal = Image.open(folderName+"Segment_Images/gPb/"+filename)
+                    image = self.remover_linha_branca(self.achar_pintar_area(self.binarizar_imagem(imgOriginal), imgOriginal))
+                    image.save(folderName + "Segment_Images/gPb/colorida/" + filename)
+        
+        
 def main():
     
     obj = Rotulacao()
