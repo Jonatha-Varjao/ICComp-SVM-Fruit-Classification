@@ -5,9 +5,9 @@ from PIL import Image, ImageDraw
 
 import sys
 from itertools import product
-from ufarray import *
+from rotulacao.ufarray import UFarray
+import os
 import cv2
-
 
 
 class Rotulacao:
@@ -158,10 +158,10 @@ class Rotulacao:
                 somaR, somaG, somaB = 0,0,0
                 #print("Soma Zerou: "+str(somaR)+" "+str(somaG)+" "+str(somaB))
             if i == len(pixel_Labeados)-1:
-                somaR = somaR / RGB_Label.count(pixel_Labeados[i-1][1])
-                somaG = somaG / RGB_Label.count(pixel_Labeados[i-1][1])
-                somaB = somaB / RGB_Label.count(pixel_Labeados[i-1][1])
-                NovasCores.append((somaR, somaG, somaB, pixel_Labeados[i-1][1] ))
+                somaR = somaR / RGB_Label.count(pixel_Labeados[i][1])
+                somaG = somaG / RGB_Label.count(pixel_Labeados[i][1])
+                somaB = somaB / RGB_Label.count(pixel_Labeados[i][1])
+                NovasCores.append((somaR, somaG, somaB, pixel_Labeados[i][1] ))
                 somaR, somaG, somaB = 0,0,0
                 #print("Ultima soma: "+str(somaR)+" "+str(somaG)+" "+str(somaB))
         
@@ -249,13 +249,14 @@ class Rotulacao:
         
         return new_image
     
+    # EXTRACAO FOLDER(1 - JSEG , 2 - GPB)
     def extract_folder(self, folderName):
         for filename in os.listdir(folderName+"Segment_Images/jseg"):
             if '.' in filename:
                 print(filename)
-                imgOriginal = Image.open(folderName+filename)
+                imgOriginal = Image.open(folderName+"Segment_Images/jseg/"+filename)
                 image = self.remover_linha_branca(self.achar_pintar_area(self.binarizar_imagem(imgOriginal), imgOriginal))
-                cv2.imwrite(folderName + "Segment_Images/jseg/colorida" + filename, image)
+                image.save(folderName + "Segment_Images/jseg/colorida/" + filename)
         return image
 
 def main():
