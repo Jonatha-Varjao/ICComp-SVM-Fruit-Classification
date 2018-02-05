@@ -2,7 +2,7 @@
 from extraction.extraction import * 
 from kmeans.kmeans import * 
 from jseg.jseg import *
-
+from rotulacao.rotulacao import *
 
 '''
     "Main" dos scripts
@@ -20,12 +20,13 @@ if __name__ == "__main__":
     seg              = Segment()
     extraction       = Extract()
     jseg             = Jseg()
-    
+    colorir          = Rotulacao()
+
     # Teste individual com alguma imagem do database
     #image = extraction.crop_image(extraction.extract_countor('/home/jonatha/Documentos/PIBICWARLEY/ICComp-SVM-Fruit-Classification/database/LaranjaInfectada/2013_10_25__0063.jpg'))
     #cv2.imwrite("teste.jpg", image)
     
-    # PRE-PROCESSAMENTO
+    # PRE-PROCESSAMENTO ( CROP DO BACKGROUND DA FRUTA )
     # Extração das frutas nas imagens
     # extraction.extract_folder(manga)
     # extraction.extract_folder(laranja)
@@ -42,8 +43,29 @@ if __name__ == "__main__":
     #jseg.segment_folder(macaVerde)
 
 
-    # PROCESSAMENTO DAS IMAGENS (gPb)
+    # POS PROCESSAMENTO DAS IMAGENS ( JSEG )
+    # COLORAÇÃO DAS AREAS
+    colorir.extract_folder(macaRoyal, 1)
+    colorir.extract_folder(macaVerde, 1)
+    colorir.extract_folder(manga, 1)
+    colorir.extract_folder(laranjaInfectada, 1)
+    colorir.extract_folder(laranja, 1)
+
+
+
+
+    # POS PROCESSAMENTO DAS IMAGENS ( gPb )
     
+
+    #colorir.extract_folder(macaRoyal, 2)
+    #colorir.extract_folder(macaVerde, 2)
+    #colorir.extract_folder(manga, 2)
+    #colorir.extract_folder(laranjaInfectada, 2)
+    #colorir.extract_folder(laranja, 2)
+
+
+
+
 
     # PROCESSAMENTO DAS IMAGENS (K-MEANS)
     #seg.segment_folder(manga)
