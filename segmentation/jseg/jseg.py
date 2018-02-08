@@ -19,9 +19,15 @@ class Jseg:
                 print(filename)
                 image = cv2.imread(folderName+"Extracted_Images/"+filename)
                 print(str(image.shape[0]),image.shape[1])
-                call(["wine","jseg/segwin.exe","-i",folderName+"Extracted_Images/"+filename,"-t","6","-s",str(image.shape[0]), str(image.shape[1]),"-o", folderName+"Segment_Images/jseg/"+"Jseg_"+filename, "1"])
+                call(["wine","jseg/segwin.exe","-i",folderName+"Extracted_Images/"+filename,"-t","6","-s",str(image.shape[0]), str(image.shape[1]),"-o", folderName+"Segment_Images/jseg/"+"Jseg_"+filename, "1", "-l", "100" ])
 
-# FIX: AUMENTAR A ÁREA DA IMAGEM CROPADA PARA MELHORAR A SEGMENTAÇÃO USANDO JSEG [FEITO]
-
+'''
+FIX: AUMENTAR A ÁREA DA IMAGEM CROPADA PARA MELHORAR A SEGMENTAÇÃO USANDO JSEG [FEITO]
+FIX: TESTAR COM SCALES DIFERENES NA HORA DE SEGMENTA:
+        -> 100: - NA HORA DA ROTULAÇÃO AS AREAS SE COLIDIRAM 
+                - AREAS ESCURAS NA IMAGEM SEGMENTADA 
+        -> 30: ?
+        -> 50: ?
+'''
 if __name__ == "__main__":
     call(["pwd",""])
