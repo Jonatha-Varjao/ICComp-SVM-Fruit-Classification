@@ -4,7 +4,7 @@
 from PIL import Image, ImageDraw
 
 import sys
-from ufarray import UFarray
+from rotulacao.ufarray import UFarray
 import os
 import cv2
 import numpy as np
@@ -160,10 +160,12 @@ class Rotulacao:
     def extract_folder(self, folderName, metodo):
         if metodo == 1:
             for filename in os.listdir(folderName+"Segment_Images/jseg"):
+                print(filename)
                 if '.' in filename:
                     print(filename)
-                    imgOriginal = Image.open(folderName+"Segment_Images/jseg/"+filename)
-                    image = self.remover_linha_branca(self.achar_pintar_area(self.binarizar_imagem(imgOriginal), imgOriginal))
+                    jseg_image = Image.open(folderName+"Segment_Images/jseg/"+filename)
+                    extracted_image = Image.open(folderName+"/Extracted_Images/"+filename.split("Jseg_")[1])
+                    image = self.remover_linha_branca(self.achar_area(self.binarizar_imagem(jseg_image), extracted_image))
                     image.save(folderName + "Segment_Images/jseg/colorida/" + filename)
         elif metodo == 2:
             for filename in os.listdir(folderName+"Segment_Images/gPb"):
@@ -179,11 +181,14 @@ def main():
     obj = Rotulacao()
     imgOriginal = Image.open(sys.argv[1])
     #img.show()
-    img_teste = obj.binarizar_imagem(imgOriginal)
+    img_binarizada = obj.binarizar_imagem(imgOriginal)
+    img = Image.open('2013_10_25__0063.jpg')
+    img_binarizada.show()
+    img_teste = obj.achar_area(img_binarizada, img)
     img_teste.show()
-    img_teste = obj.achar_area(obj.binarizar_imagem(imgOriginal), imgOriginal)
-    img_teste.show()
-    img_teste = obj.remover_linha_branca(obj.achar_area(obj.binarizar_imagem(imgOriginal), imgOriginal))
-    img_teste.show()
+    #img_teste = obj.remover_linha_branca(obj.achar_area(obj.binarizar_imagem(imgOriginal), imgOriginal))
+    #img_teste = obj.remover_linha_branca(img_teste)
+    #img_teste = obj.remover_linha_branca(img_teste)
+    #img_teste.show()
 
 if __name__ == "__main__": main()
