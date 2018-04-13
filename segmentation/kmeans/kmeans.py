@@ -52,3 +52,16 @@ class Segment:
             #  - try - catch, ou interpolar a imagem pra bater o kernel....
 #TODO   4: Ajeitar o problema do filename incluir o folder e interromper a segmentação
             # '.jpg' in String ( apesar que a solução tá bem clean)
+
+if __name__ == "__main__":
+    label = []
+    seg4 = Segment(4)
+    seg5 = Segment(5)
+    seg6 = Segment(6)
+    label, result4 = seg4.kmeans(cv2.imread(sys.argv[1]))
+    label, result5 = seg5.kmeans(cv2.imread(sys.argv[1]))
+    label, result6 = seg6.kmeans(cv2.imread(sys.argv[1]))
+    
+    cv2.imwrite("k4.jpg", result4)
+    cv2.imwrite("k5.jpg", result5)
+    cv2.imwrite("k6.jpg", result6)
