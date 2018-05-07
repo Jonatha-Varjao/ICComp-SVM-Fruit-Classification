@@ -23,7 +23,7 @@ class Jseg(Rotulacao):
                 print(filename, str(image.shape[0]),image.shape[1])
                 call(["wine","jseg/segwin.exe","-i",folderName+"Extracted_Images/"+filename,"-t","6","-s",str(image.shape[0]), str(image.shape[1]),"-o", folderName+"Segment_Images/jseg/"+"Jseg_"+filename, "1", "-l", "10" ])
     # Coloração da pasta contendo as imagens segmentas 
-    def extract_folder(self, folderName):
+    def color_segmented_folder(self, folderName):
         for filename in os.listdir(folderName+"Segment_Images/jseg"):
             if '.' in filename:
                 print(filename)
