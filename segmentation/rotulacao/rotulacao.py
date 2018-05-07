@@ -9,6 +9,12 @@ import os
 import cv2
 import numpy as np
 
+"""
+    Class Rotualação
+        Recebe uma imagem segmentada (jseg/gPb) e faz a redução de cores em cada área segmentada pelo
+    algoritmo.
+        TODO: - Traçar um limiar das áreas "podres"
+"""
 
 class Rotulacao:
     def binarizar_imagem(self, img):
@@ -27,6 +33,7 @@ class Rotulacao:
         dilatation = cv2.dilate(erosionImage, kernel, iterations = 1)
         new_image = Image.fromarray(dilatation)
         return new_image
+    
     # achar a cor da area rotulada ( R+,G+g,B+b / qtdPixeldaArea )
     def cor_area(self, pixel_Labeados, RGB_Label):
         somaR = 0
@@ -96,6 +103,9 @@ class Rotulacao:
                     red = int(NovasCores[j][0])
                     green = int(NovasCores[j][1])
                     blue = int(NovasCores[j][2])
+                    # forçar o background a ser preto
+                    if red < 5 and green < 5 and blue < 5:
+                        red,green,blue = 0,0,0
                     outmatrizPixel[x, y] = (red, green, blue)
         return outmatrizPixel
     
@@ -155,28 +165,8 @@ class Rotulacao:
                         qtd_Pixels = 0
         return new_image
     
-
-    # EXTRACAO FOLDER(1 - JSEG , 2 - GPB)
-    def extract_folder(self, folderName, metodo):
-        if metodo == 1:
-            for filename in os.listdir(folderName+"Segment_Images/jseg"):
-                if '.' in filename:
-                    print(filename)
-                    jseg_image = Image.open(folderName+"Segment_Images/jseg/"+filename)
-                    extracted_image = Image.open(folderName+"/Extracted_Images/"+filename.split("Jseg_")[1])
-                    image = self.remover_linha_branca(self.achar_area(self.binarizar_imagem(jseg_image), extracted_image))
-                    image.save(folderName + "Segment_Images/jseg/colorida/" + filename)
-        elif metodo == 2:
-            for filename in os.listdir(folderName+"Segment_Images/gPb"):
-                if '.' in filename:
-                    print(filename)
-                    imgOriginal = Image.open(folderName+"Segment_Images/gPb/"+filename)
-                    extracted_image = Image.open(folderName+"/Extracted_Images/"+filename.split("Gpb_")[1])
-                    image = self.remover_linha_branca(self.achar_area(self.binarizar_imagem(jseg_image), extracted_image))
-                    image.save(folderName + "Segment_Images/gPb/colorida/" + filename)
         
-def main():
-    
+if __name__ == "__main__": 
     obj = Rotulacao()
     imgOriginal = Image.open(sys.argv[1])
     #img.show()
@@ -184,5 +174,3 @@ def main():
     #img_teste = obj.remover_linha_branca(img_teste)
     #img_teste = obj.remover_linha_branca(img_teste)
     #img_teste.show()
-
-if __name__ == "__main__": main()
