@@ -4,3 +4,4 @@ database/
 *.JPG
 *.PNG
 __pycache__/
+.vscode/
