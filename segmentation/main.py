@@ -1,32 +1,28 @@
 # -*- coding: utf-8 -*-
-from extraction.extraction import * 
-from kmeans.kmeans import * 
-from jseg.jseg import *
-from rotulacao.rotulacao import *
+from extraction.extraction import Extract
+from kmeans.kmeans import Segment
+from jseg.jseg import Jseg
+from rotulacao.rotulacao import Rotulacao
 
-'''
-    "Main" dos scripts
-'''
+"""
+    Script Principal
+"""
 
 if __name__ == "__main__":
-    # HARD-CODE dos paths das imagens
-    # Trocar o path para a máquina local
-    manga            = '/home/jonatha/Documentos/PIBICWARLEY/ICComp-SVM-Fruit-Classification/database/Manga/'
-    macaRoyal        = '/home/jonatha/Documentos/PIBICWARLEY/ICComp-SVM-Fruit-Classification/database/MacaRoyal/'
-    macaVerde        = '/home/jonatha/Documentos/PIBICWARLEY/ICComp-SVM-Fruit-Classification/database/MacaVerde/'
-    laranja          = '/home/jonatha/Documentos/PIBICWARLEY/ICComp-SVM-Fruit-Classification/database/LaranjaTangerina/'
-    laranjaInfectada = '/home/jonatha/Documentos/PIBICWARLEY/ICComp-SVM-Fruit-Classification/database/LaranjaInfectada/'
-
+    """ Strings da base de dados """
+    manga            = '../database/Manga/'
+    macaRoyal        = '../database/MacaRoyal/'
+    macaVerde        = '../database/MacaVerde/'
+    laranja          = '../database/LaranjaTangerina/'
+    laranjaInfectada = '../database/LaranjaInfectada/'
+    
+    """ Criação dos objetos """
     seg              = Segment()
     extraction       = Extract()
     jseg             = Jseg()
     colorir          = Rotulacao()
-
-    # Teste individual com alguma imagem do database
-    #image = extraction.crop_image(extraction.extract_countor('/home/jonatha/Documentos/PIBICWARLEY/ICComp-SVM-Fruit-Classification/database/LaranjaInfectada/2013_10_25__0063.jpg'))
-    #cv2.imwrite("teste.jpg", image)
     
-    # PRE-PROCESSAMENTO ( CROP DO BACKGROUND DA FRUTA )
+    """ PRE-PROCESSAMENTO ( CROP DO BACKGROUND DA FRUTA ) """
     # Extração das frutas nas imagens
     # extraction.extract_folder(manga)
     # extraction.extract_folder(laranja)
@@ -34,40 +30,29 @@ if __name__ == "__main__":
     # extraction.extract_folder(macaRoyal)
     # extraction.extract_folder(macaVerde)
 
-    
-    # PROCESSAMENTO DAS IMAGENS (JSEG)
+    """ PROCESSAMENTO DAS IMAGENS (JSEG) """
     #jseg.segment_folder(macaRoyal)
     #jseg.segment_folder(laranjaInfectada)
     #jseg.segment_folder(laranja)
     #jseg.segment_folder(manga)
     #jseg.segment_folder(macaVerde)
 
-
-    # POS PROCESSAMENTO DAS IMAGENS ( JSEG )
+    """ POS PROCESSAMENTO DAS IMAGENS ( JSEG ) """
     # COLORAÇÃO DAS AREAS
-    colorir.extract_folder(macaRoyal, 1)
-    colorir.extract_folder(macaVerde, 1)
-    colorir.extract_folder(manga, 1)
-    colorir.extract_folder(laranjaInfectada, 1)
-    colorir.extract_folder(laranja, 1)
+    #jseg.extract_folder(laranjaInfectada)
+    #jseg.extract_folder(laranja)
+    #jseg.extract_folder(macaRoyal)
+    #jseg.extract_folder(macaVerde)
+    #jseg.extract_folder(manga)
 
-
-
-
-    # POS PROCESSAMENTO DAS IMAGENS ( gPb )
-    
-
+    """ POS PROCESSAMENTO DAS IMAGENS ( gPb ) """
     #colorir.extract_folder(macaRoyal, 2)
     #colorir.extract_folder(macaVerde, 2)
     #colorir.extract_folder(manga, 2)
     #colorir.extract_folder(laranjaInfectada, 2)
     #colorir.extract_folder(laranja, 2)
 
-
-
-
-
-    # PROCESSAMENTO DAS IMAGENS (K-MEANS)
+    """ PROCESSAMENTO DAS IMAGENS (K-MEANS) """
     #seg.segment_folder(manga)
     #seg.segment_folder(laranja)
     #seg.segment_folder(laranjaInfectada)
