@@ -45,6 +45,8 @@ TODO relacionado ao readme do início do projeto.
 - Stack das tecnologias usadas
 - Terminar Manual de instalação
 - Ao tornar o rep público, explicar o projeto em outro markdown
+- Classificação: 
+-- Qual limiar de escolha das áreas ruins? [RGB, HSV]?
 
 [aqui]:<https://drive.google.com/drive/folders/1hD0XnqsnE00qJrI5i6wnzeufXEXUYb2k?usp=sharing>
 [Warley Gramacho]: <http://lattes.cnpq.br/2536790818552672>
