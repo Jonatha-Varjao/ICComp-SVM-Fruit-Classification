@@ -37,13 +37,20 @@ if __name__ == "__main__":
     #jseg.segment_folder(manga)
     #jseg.segment_folder(macaVerde)
 
+    """ PROCESSAMENTO DAS IMAGENS (K-MEANS) """
+    #seg.segment_folder(manga)
+    #seg.segment_folder(laranja)
+    #seg.segment_folder(laranjaInfectada)
+    #seg.segment_folder(macaRoyal)
+    #seg.segment_folder(macaVerde)
+
     """ POS PROCESSAMENTO DAS IMAGENS ( JSEG ) """
     # COLORAÇÃO DAS AREAS
-    #jseg.extract_folder(laranjaInfectada)
-    #jseg.extract_folder(laranja)
-    #jseg.extract_folder(macaRoyal)
-    #jseg.extract_folder(macaVerde)
-    #jseg.extract_folder(manga)
+    jseg.color_segmented_folder(laranjaInfectada)
+    #jseg.color_segmented_folder(laranja)
+    #jseg.color_segmented_folder(macaRoyal)
+    #jseg.color_segmented_folder(macaVerde)
+    #jseg.color_segmented_folder(manga)
 
     """ POS PROCESSAMENTO DAS IMAGENS ( gPb ) """
     #colorir.extract_folder(macaRoyal, 2)
@@ -52,10 +59,7 @@ if __name__ == "__main__":
     #colorir.extract_folder(laranjaInfectada, 2)
     #colorir.extract_folder(laranja, 2)
 
-    """ PROCESSAMENTO DAS IMAGENS (K-MEANS) """
-    #seg.segment_folder(manga)
-    #seg.segment_folder(laranja)
-    #seg.segment_folder(laranjaInfectada)
-    #seg.segment_folder(macaRoyal)
-    #seg.segment_folder(macaVerde)
+    """ POS PROCESSAMENTO DAS IMAGENS (K-MEANS) """
+
+    
 
