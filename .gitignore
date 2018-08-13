@@ -5,3 +5,4 @@ database/
 *.PNG
 __pycache__/
 .vscode/
+*.pyc
