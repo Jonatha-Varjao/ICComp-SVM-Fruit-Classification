@@ -1,7 +1,13 @@
-
+# -*- coding: utf-8 -*-
 from itertools import product
 
+
 class UFarray:
+    """
+        Classe representando estrutura de Union-Find 
+        boa para eliminar redundância de dados.
+        utilizada no script de rotulação de uma imagem binarizada.
+    """
     def __init__(self):
         # Array das label -> armazena as equivalencias
         self.P = []

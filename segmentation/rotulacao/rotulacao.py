@@ -1,10 +1,8 @@
 # -*- coding: utf-8 -*-
-
 # LABELLING METHOD USING UNION-FIND ARRAYS
 from PIL import Image, ImageDraw
-
 import sys
-from rotulacao.ufarray import UFarray
+from segmentation.rotulacao.ufarray import UFarray
 import os
 import cv2
 import numpy as np
@@ -15,9 +13,12 @@ import numpy as np
     algoritmo.
         TODO: - Traçar um limiar das áreas "podres"
 """
-
 class Rotulacao:
+    
     def binarizar_imagem(self, img):
+        """
+            Binarizacao da imagem utilizando treshould de 180
+        """
         new_image = Image.new("RGB", (img.size[0], img.size[1]))
         for i in range(img.size[0]):
             for j in range(img.size[1]):
@@ -34,8 +35,10 @@ class Rotulacao:
         new_image = Image.fromarray(dilatation)
         return new_image
     
-    # achar a cor da area rotulada ( R+,G+g,B+b / qtdPixeldaArea )
     def cor_area(self, pixel_Labeados, RGB_Label):
+        """
+            Média de cor da área segmentada
+        """
         somaR = 0
         somaG = 0
         somaB = 0
@@ -63,6 +66,10 @@ class Rotulacao:
         return NovasCores
 
     def achar_area(self, img, imgOriginal):
+        """
+            Encontro as áreas da segmentação da imagem e as pinto
+            conforme sua cor
+        """
         img = img.convert('L')
         matrizPixel = img.load()
         width, height = img.size
@@ -95,8 +102,11 @@ class Rotulacao:
         NovasCores = rotulacao.cor_area(pixel_labeados, RGB_Label)
         outmatrizPixel = rotulacao.pintar_area(NovasCores, labels, outmatrizPixel)
         return saida_img
-    
+        
     def pintar_area(self, NovasCores, labels, outmatrizPixel):
+        """
+            Pinto a área com a média da cor encontrada
+        """
         for (x, y) in labels:
             for j in range(len(NovasCores)):
                 if labels[(x, y)] == NovasCores[j][3]:
@@ -109,8 +119,8 @@ class Rotulacao:
                     outmatrizPixel[x, y] = (red, green, blue)
         return outmatrizPixel
     
-    # ANALISO MINHA 8-VIZINHANCA
-    # SE TENHO 5 PIXEIS VIZINHOS > 5, PEGO O DA DIREITA NAO PRETO E VOU ANALISANDO MINHA VIZINHANCA
+    # TODO:  ANALISO MINHA 8-VIZINHANCA
+    #        SE TENHO 5 PIXEIS VIZINHOS > 5, PEGO O DA DIREITA NAO PRETO E VOU ANALISANDO MINHA VIZINHANCA
     def remover_linha_branca(self, img):
         new_image = img.copy()
         qtd_Pixels = 0

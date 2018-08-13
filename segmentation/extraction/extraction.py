@@ -8,10 +8,12 @@ import os
     Inspiração: https://gist.github.com/Munawwar/0efcacfb43827ba3a6bac3356315c419 
                 https://codereview.stackexchange.com/questions/132914/crop-black-border-of-image-using-numpy
 '''
-
 class Extract:
 
     def crop_image(self, img):
+        """
+            Cropo a imagem retirando o fruto.
+        """
         maskBG = img > 0
         coords = np.argwhere(maskBG)
         # Caixa de valores de pixels não-pretos.
@@ -36,14 +38,11 @@ class Extract:
         cropped = img[x0_maior:x1_maior, y0_maior:y1_maior, z0:z1]
         return cropped
 
-
     def getSobel(self,channel):
-
         sobelx = cv2.Sobel(channel, cv2.CV_16S, 1, 0, borderType=cv2.BORDER_REPLICATE)
         sobely = cv2.Sobel(channel, cv2.CV_16S, 0, 1, borderType=cv2.BORDER_REPLICATE)
         sobel = np.hypot(sobelx, sobely)
-
-        return sobel;
+        return sobel
 
     def findSignificantContours(self, img, sobel_8u):
         image, contours, heirarchy = cv2.findContours(sobel_8u, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
@@ -61,14 +60,14 @@ class Extract:
         significant = []
         tooSmall = sobel_8u.size * 10 / 100 # Se o contorno não cobre 5% da área total da imagem, provavelmente é muito pequeno
         for tupl in level1:
-            contour = contours[tupl[0]];
+            contour = contours[tupl[0]]
             area = cv2.contourArea(contour)
             if area > tooSmall:
                 cv2.drawContours(img, [contour], 0, (0,0,0),2, cv2.LINE_AA, maxLevel=1)
                 significant.append([contour, area])
         
         significant.sort(key=lambda x: x[1])
-        return [x[0] for x in significant];
+        return [x[0] for x in significant]
 
     def extract_countor(self, path):
         img = cv2.imread(path)
@@ -76,10 +75,10 @@ class Extract:
         # Operador Sobel
         sobel = np.max( np.array([ self.getSobel(blurred[:,:, 0]), self.getSobel(blurred[:,:, 1]), self.getSobel(blurred[:,:, 2]) ]), axis=0 )
         mean = np.mean(sobel)
-        sobel[sobel <= mean] = 0;
-        sobel[sobel > 255] = 255;
+        sobel[sobel <= mean] = 0
+        sobel[sobel > 255] = 255
         # Imagem apos o filtro de sobel
-        #cv2.imwrite('edge.png', sobel);
+        #cv2.imwrite('edge.png', sobel)
         sobel_8u = np.asarray(sobel, np.uint8)
         # Contornos encontrados
         significant = self.findSignificantContours(img, sobel_8u)
@@ -91,7 +90,7 @@ class Extract:
         mask = np.logical_not(mask)
         # Remoção do Background
         imgTeste = img.copy()
-        imgTeste[mask] = 0;
+        imgTeste[mask] = 0
         # Coordenadas dos pixels pretos
         maskBG = imgTeste > 0
         coords = np.argwhere(maskBG)

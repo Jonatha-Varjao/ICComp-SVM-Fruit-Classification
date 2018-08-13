@@ -9,14 +9,23 @@ import os
     Implementação baseada na documentaçao do openCV:
     https://docs.opencv.org/3.0-beta/doc/py_tutorials/py_ml/py_kmeans/py_kmeans_opencv/py_kmeans_opencv.html
 '''
-
 class Segment:
-        # construtor da classe com default de clusters = 4.
+    """
+        Classe representando segmentação usando clusterição
+        por k-means
+    """
+
     def __init__(self, segments = 4):
+        """
+            Utilizando K=4 como default
+        """
         self.segments=segments
 
-        # Método para segmentar a imagem usando K-means.
     def kmeans(self,image):
+        """
+            Segmentacao utilizando clustericao com kmeans
+            do openCV
+        """
         vectorized       =   image.reshape(-1,3)
         vectorized       =   np.float32(vectorized) 
         criteria         =   (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 10, 1.0)
@@ -25,14 +34,18 @@ class Segment:
         segmented_image  = res.reshape((image.shape))
         return label.reshape((image.shape[0], image.shape[1])), segmented_image.astype(np.uint8)
 
-        # Extração do K da imagem segmentada.
     def extract_component(self,image,label_image,label):
+        """
+            Extração dos K da imagem
+        """
         component                     = np.zeros(image.shape, np.uint8)
         component[label_image==label] = image[label_image==label]
         return component
-        
-        # Segmentação da pasta contendo as imagens pre processadas
+          
     def segment_folder(self, folderName):
+        """
+            Segmentação da pasta contendo as imagens pre processadas 
+        """
         for filename in os.listdir(folderName+"Extracted_Images/"):
             if '.' in filename:
                 print(filename)

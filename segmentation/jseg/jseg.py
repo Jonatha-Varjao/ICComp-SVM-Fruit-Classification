@@ -4,26 +4,34 @@ import os
 import sys
 from subprocess import call
 from PIL import Image, ImageDraw
-from rotulacao.rotulacao import Rotulacao
+from segmentation.rotulacao.rotulacao import Rotulacao
 
-'''
+"""
  Script para utilizar o binário da segmentação do JSEG.
     Utilizando wine 2.0.4 ( para executar binário para windows )
     Scrip ira chamar o programa na qual faz a segmentação utilizando Jseg
     será segmentadas as imagens que já estão previamente pré-processadas
-'''
-
-
+"""
 class Jseg(Rotulacao):
-    # Segmentação da pasta contendo as imagens pre processadas
+    """
+        Classe representação a segmentação de uma imagem utilizando
+        o algoritmo JSEG deng e manjuntah 2001
+    """
+
     def segment_folder(self, folderName):
+        """
+            Segmentação da pasta contendo as imagens pre processadas
+        """
         for filename in os.listdir(folderName+"Extracted_Images/"):
             if '.' in filename:
                 image = cv2.imread(folderName+"Extracted_Images/"+filename)
                 print(filename, str(image.shape[0]),image.shape[1])
                 call(["wine","jseg/segwin.exe","-i",folderName+"Extracted_Images/"+filename,"-t","6","-s",str(image.shape[0]), str(image.shape[1]),"-o", folderName+"Segment_Images/jseg/"+"Jseg_"+filename, "1", "-l", "10" ])
-    # Coloração da pasta contendo as imagens segmentas 
+    
     def color_segmented_folder(self, folderName):
+        """
+            Coloração da pasta contendo as imagens segmentas 
+        """
         for filename in os.listdir(folderName+"Segment_Images/jseg"):
             if '.' in filename:
                 print(filename)
@@ -40,14 +48,12 @@ FIX: TESTAR COM SCALES DIFERENES NA HORA DE SEGMENTA:
         -> 50: - IGUAL AO 100
         -> 30: - IGUAL A0 100
         -> 10: - IGUAL AO 100
-    #TODO EROSAO / DILATACAO NA HORA DA ROTULACAO (IMAGEM BINARIZADA)
-        - RESOLVEU O PROBLEMA DA COLORAÇÃO
-        - NA HORA DA ACHAR A NOVA COR TÔ PEGANDO A IMAGEM EXTRAÍDA
+    #TODO EROSAO / DILATACAO NA HORA DA ROTULACAO (IMAGEM BINARIZADA) [FEITO]
+        - RESOLVEU O PROBLEMA DA COLORAÇÃO                            [FEITO]
+        - NA HORA DA ACHAR A NOVA COR TÔ PEGANDO A IMAGEM EXTRAÍDA    [FEITO]
 '''
-if __name__ == "__main__":
-    
+if __name__ == "__main__":    
     image = Image.open(sys.argv[1])
     print(image)
     scaleFactor = sys.argv[2]
-
     call(["wine","segwin.exe","-i", sys.argv[1],"-t","6","-s",str(image.size[0]), str(image.size[1]),"-o", scaleFactor+sys.argv[1], "1", "-l", scaleFactor ])
