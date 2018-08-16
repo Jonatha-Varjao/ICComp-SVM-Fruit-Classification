@@ -2,11 +2,12 @@
 from PIL import Image
 from io import StringIO
 from sklearn import svm
-from sklearn import cross_validation
-from sklearn import grid_search
 from sklearn import metrics
+from sklearn import model_selection
 from sklearn.externals import joblib
 from typing import List
+import matplotlib.pyplot as plt
+import numpy as np
 import sys
 import os
 import time
@@ -17,16 +18,10 @@ import time
 """
 class SVM:
     """
-        Classe representando SVM
+        Classe representando classificador SVM
+        para uma classificação binária.
     """    
-    # def __init__(self, kernel='linear', degree=3, gamma='auto', coef0=0.0,
-    #              tol=1e-3, nu=0.5, shrinking=True, cache_size=200,
-    #              verbose=False, max_iter=-1, random_state=None):
-    #     super(svm.SVC(), self).__init__(
-    #         'one_class', kernel, degree, gamma, coef0, tol, 0., nu, 0.,
-    #         shrinking, False, cache_size, None, verbose, max_iter,
-    #         random_state)
-
+    
     def train_data(self, path_a: str, path_b: str, print_metrics=True):
         """
             Treina o classificador. path_a e path_b devem ser paths de pastas. 
@@ -51,31 +46,36 @@ class SVM:
         data = training_a + training_b
         # target é a lista das classes para cada vetor de features: 
         # '1' pra classe A e '0' pra classe B
-        target = [1] * len(training_a) + [0] * len(training_b)
-        # divido os dados de treinamento em um set de teste e treinamento
+        target = [1] * len(training_a) + [0] * len(training_b)        
+        # # divido os dados de treinamento em um set de teste e treinamento
         # o set de teste vai conter 30% do total
-        x_train, x_test, y_train, y_test = cross_validation.train_test_split(data,
+        x_train, x_test, y_train, y_test = model_selection.train_test_split(data,
                 target, test_size=0.30)
+        # plotando o gráfico
+        # plot_graph(y_train, y_test)
         # definindo uma busca para os melhores parametros 
         parameters = {'kernel': ['linear'], 'C': [1, 10, 100, 1000],
-                'gamma': [0.01, 0.001, 0.0001]}
+                'gamma': [0.1, 0.01, 0.001, 0.0001]}
         # procura os melhores parametros para kernel linear variando o C e a gamma
-        clf = grid_search.GridSearchCV(svm.SVC(), parameters).fit(x_train, y_train)
+        clf = model_selection.GridSearchCV(svm.SVC(), parameters, scoring='f1_macro', cv=10).fit(x_train, y_train)
+        # cross-fold validation prediciont usando 10 folds
         classifier = clf.best_estimator_
+        prediciton = classifier.predict(x_test)
         if print_metrics:
             print()
-            print('Parametros:', clf.best_params_)
+            print('Parameters:', clf.best_params_)
             print()
-            print('Score do melhor parametro')
-            print(metrics.classification_report(y_test,
-                classifier.predict(x_test)))
+            print('Best classifier score')
+            print(metrics.classification_report(y_test, prediciton))
+            print()
+            print('Confussion Matrix')
+            print(metrics.confusion_matrix(y_test, prediciton))
+            print()
+            print('f1 score')
+            print(metrics.f1_score(y_test, prediciton))
         return classifier
 
-    def predit_data(self, path_test:str):
-        testdata = self.process_folder(path_test)
-        return self.predict(testdata)
 
-        
     def process_folder(self, path: str)-> List[List[float]]:
         """
             Retorna o array de features para todas imagens em um diretório
