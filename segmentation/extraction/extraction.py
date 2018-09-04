@@ -4,7 +4,7 @@ import cv2
 import os
 
 '''
-    Implementação para extração de objetos de um dado plano de fundo.
+    Implementação para extração de objetos de um dado plano de fundo homogêno [PRETO].
     Inspiração: https://gist.github.com/Munawwar/0efcacfb43827ba3a6bac3356315c419 
                 https://codereview.stackexchange.com/questions/132914/crop-black-border-of-image-using-numpy
 '''
