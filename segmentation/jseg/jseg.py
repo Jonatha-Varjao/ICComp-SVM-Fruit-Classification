@@ -26,7 +26,7 @@ class Jseg(Rotulacao):
             if '.' in filename:
                 image = cv2.imread(folderName+"Extracted_Images/"+filename)
                 print(filename, str(image.shape[0]),image.shape[1])
-                call(["wine","jseg/segwin.exe","-i",folderName+"Extracted_Images/"+filename,"-t","6","-s",str(image.shape[0]), str(image.shape[1]),"-o", folderName+"Segment_Images/jseg/"+"Jseg_"+filename, "1", "-l", "10" ])
+                call(["wine","segmentation/jseg/segwin.exe","-i",folderName+"Extracted_Images/"+filename,"-t","6","-s",str(image.shape[0]), str(image.shape[1]),"-o", folderName+"Segment_Images/jseg/"+"Jseg_"+filename, "1", "-l", "10" ])
     
     def color_segmented_folder(self, folderName):
         """
@@ -37,8 +37,8 @@ class Jseg(Rotulacao):
                 print(filename)
                 jseg_image = Image.open(folderName+"Segment_Images/jseg/"+filename)
                 extracted_image = Image.open(folderName+"/Extracted_Images/"+filename.split("Jseg_")[1])
-                image = self.remover_linha_branca(self.achar_area(self.binarizar_imagem(jseg_image), extracted_image))
-                image.save(folderName + "Segment_Images/jseg/colorida/" + filename)
+                image = self.remover_linha_branca(self.remover_linha_branca(self.achar_area(self.binarizar_imagem(jseg_image), extracted_image)))
+                image.save(folderName + "Segment_Images/jseg/colorida/sem_linha/" + filename)
 
 '''
 FIX: AUMENTAR A ÁREA DA IMAGEM CROPADA PARA MELHORAR A SEGMENTAÇÃO USANDO JSEG [FEITO]

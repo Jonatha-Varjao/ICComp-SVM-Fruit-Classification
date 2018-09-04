@@ -13,7 +13,6 @@ Segue abaixo a implementação do algoritmo jseg:
 - [JSEG]
 
 ###### TO_DO
-- Transcrever os scripts de Matlab->Python.
-- Colorir as regiões obtidas através do JSEG.
+- Colorir as regiões obtidas através do JSEG. [FEITO]
 
 [JSEG]:<https://drive.google.com/drive/folders/1VY_ZPWyBeYjrPxR4fPizUmKlAIE4cL9h?usp=sharing>

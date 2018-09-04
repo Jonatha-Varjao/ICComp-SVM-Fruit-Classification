@@ -8,10 +8,37 @@ from sklearn.externals import joblib
 from typing import List
 import matplotlib.pyplot as plt
 import numpy as np
+import itertools
 import sys
 import os
 import time
 
+def plot_confusion_matrix(cm, classes,
+                          normalize=False,
+                          title='Matriz de Confusão',
+                          cmap=plt.cm.Blues):
+    """
+    Esta funcao printa e plota a matriz de confusão.
+    Normalização pode ser setada 'normalize=True'.
+    """
+    plt.figure()
+    plt.imshow(cm, interpolation='nearest', cmap=cmap)
+    plt.title(title)
+    plt.colorbar()
+    tick_marks = np.arange(len(classes))
+    plt.xticks(tick_marks, classes, rotation=45)
+    plt.yticks(tick_marks, classes)
+    if normalize:
+        cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis] 
+    thresh = cm.max() / 2.
+    for i, j in itertools.product(range(cm.shape[0]), range(cm.shape[1])):
+        plt.text(j, i, cm[i, j],
+                 horizontalalignment="center",
+                 color="white" if cm[i, j] > thresh else "black")
+    plt.tight_layout()
+    plt.ylabel('Rótulo: Verdade')
+    plt.xlabel('Rótulo: Predição')
+    plt.savefig('confusion.png')
 
 """
     Classificador SVM (kernel linear)
@@ -61,6 +88,8 @@ class SVM:
         # cross-fold validation prediciont usando 10 folds
         classifier = clf.best_estimator_
         prediciton = classifier.predict(x_test)
+        # plotando o grafico da matriz de confusao
+        plot_confusion_matrix(metrics.confusion_matrix(y_test, prediciton), ['boa','ruim'], normalize=True )
         if print_metrics:
             print()
             print('Parameters:', clf.best_params_)
@@ -75,6 +104,19 @@ class SVM:
             print(metrics.f1_score(y_test, prediciton))
         return classifier
 
+    # testa na mão com redução da base de dados
+    def test_folder(self, path: str, clf: object) -> List:
+        # gerar o vector de teste
+        teste = []
+        for root, _, files in os.walk(path):
+            for file_name in files:
+                file_path = os.path.join(root, file_name)
+                img_feature = self.process_image_file(file_path)
+                if img_feature:
+                    teste.append(img_feature)
+        # clf.predict( ,teste)
+        # testar com o classificador gerado (dando load?)
+        pass
 
     def process_folder(self, path: str)-> List[List[float]]:
         """
@@ -136,19 +178,27 @@ class SVM:
         return [x/pixel_count for x in feature]
 
     def save_trained_data(self, svm: object):
-        return joblib.dump(svm, 'trainedData.pkl') 
+        return joblib.dump(svm, 'trainedData.pkl')
     
     def load_trainded_data(self, path: str):
         return joblib.load(path)
+
+
+# TODO:
+#   - Testar na mão se realmente o score é esse msm.....
+#   - Printar o SVM e seu suporte de vetor
+#   - Otimizar o Feature Vector das imagens
 
 if __name__ == '__main__':
     
     start = time.time()
     classifier = SVM()
-    classifier.train_data('/home/jonatha/Documentos/PIBICWARLEY/ICComp-SVM-Fruit-Classification/database/LaranjaTangerina/Segment_Images/jseg/colorida/sem_linha/',
-    '/home/jonatha/Documentos/PIBICWARLEY/ICComp-SVM-Fruit-Classification/database/LaranjaInfectada/Segment_Images/jseg/colorida/')
+    clf = classifier.train_data('../database/LaranjaTangerina/Segment_Images/jseg/colorida/sem_linha/',
+    '../database/LaranjaInfectada/Segment_Images/jseg/colorida/sem_linha/')
     end = time.time()
-    classifier.save_trained_data(classifier)
+    
+    classifier.save_trained_data(clf)
+
     print("tempo de treinamento: ", end-start)
     # TODO:
     #   - Testar o modelo treinado.

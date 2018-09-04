@@ -10,15 +10,15 @@ from classification.classifier import SVM
 """
 if __name__ == "__main__":
     """ Paths da base de dados """
-    manga            = '../database/Manga/'
-    macaRoyal        = '../database/MacaRoyal/'
-    macaVerde        = '../database/MacaVerde/'
-    laranja          = '../database/LaranjaTangerina/'
-    laranjaInfectada = '../database/LaranjaInfectada/'
+    manga            = 'database/Manga/'
+    macaRoyal        = 'database/MacaRoyal/'
+    macaVerde        = 'database/MacaVerde/'
+    laranja          = 'database/LaranjaTangerina/'
+    laranjaInfectada = 'database/LaranjaInfectada/'
     
     """ Criação dos objetos """
-    seg              = Segment()
-    extraction       = Extract()
+    #seg              = Segment()
+    #extraction       = Extract()
     jseg             = Jseg()
     colorir          = Rotulacao()
     
@@ -46,7 +46,7 @@ if __name__ == "__main__":
 
     """ POS PROCESSAMENTO DAS IMAGENS ( JSEG ) """
     # COLORAÇÃO DAS AREAS
-    #jseg.color_segmented_folder(laranjaInfectada)
+    jseg.color_segmented_folder(laranjaInfectada)
     #jseg.color_segmented_folder(laranja)
     #jseg.color_segmented_folder(macaRoyal)
     #jseg.color_segmented_folder(macaVerde)
