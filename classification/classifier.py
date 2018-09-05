@@ -101,7 +101,7 @@ class SVM:
             print(metrics.confusion_matrix(y_test, prediciton))
             print()
             print('f1 score')
-            print(metrics.f1_score(y_test, prediciton))
+            print(metrics.f1_score(y_test, prediciton, labels=np.unique(prediciton)))
         return classifier
 
     # testa na mão com redução da base de dados
@@ -193,8 +193,8 @@ if __name__ == '__main__':
     
     start = time.time()
     classifier = SVM()
-    clf = classifier.train_data('../database/LaranjaTangerina/Segment_Images/jseg/colorida/sem_linha/',
-    '../database/LaranjaInfectada/Segment_Images/jseg/colorida/sem_linha/')
+    clf = classifier.train_data('database/LaranjaTangerina/Segment_Images/jseg/colorida/sem_linha/',
+    'database/LaranjaInfectada/Segment_Images/jseg/colorida/sem_linha/')
     end = time.time()
     
     classifier.save_trained_data(clf)
