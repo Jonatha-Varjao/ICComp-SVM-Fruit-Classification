@@ -15,12 +15,14 @@ if __name__ == "__main__":
     macaVerde        = 'database/MacaVerde/'
     laranja          = 'database/LaranjaTangerina/'
     laranjaInfectada = 'database/LaranjaInfectada/'
-    
+    jseg_sem_linha   = 'Segment_Images/jseg/colorida/sem_linha/'
+    kmeans           = 'Segment_Images/kmeans/'
+
     """ Criação dos objetos """
     #seg              = Segment()
     #extraction       = Extract()
-    jseg             = Jseg()
-    colorir          = Rotulacao()
+    #jseg             = Jseg()
+    #colorir          = Rotulacao()
     
     """ PRE-PROCESSAMENTO ( CROP DO BACKGROUND DA FRUTA ) """
     # Extração das frutas nas imagens
@@ -46,7 +48,7 @@ if __name__ == "__main__":
 
     """ POS PROCESSAMENTO DAS IMAGENS ( JSEG ) """
     # COLORAÇÃO DAS AREAS
-    jseg.color_segmented_folder(laranjaInfectada)
+    #jseg.color_segmented_folder(laranjaInfectada)
     #jseg.color_segmented_folder(laranja)
     #jseg.color_segmented_folder(macaRoyal)
     #jseg.color_segmented_folder(macaVerde)
@@ -61,3 +63,20 @@ if __name__ == "__main__":
 
     """ POS PROCESSAMENTO DAS IMAGENS (K-MEANS) """
 
+    """ CLASSIFICACAO DAS IMAGENS """
+    
+    #  CLASSIFICADORES TREINADOS COM ESPAÇO DE COR RGB
+    svm_linear_rgb  = SVM(nome="SVM_Linear_RGB",   kernel='linear',     cor_space='RGB')
+    svm_rbf_rgb     = SVM(nome="SVM_RBF_RGB",      kernel='rbf',        cor_space='RGB')
+    svm_poly_rgb    = SVM(nome="SVM_POLY_RGB",     kernel='polynomial', cor_space='RGB')
+    svm_sigmoid_rgb = SVM(nome="SVM_SIGMOID_RGB",  kernel='sigmoid',    cor_space='RGB')
+    
+    # CLASSIFICADORES TREINADOS COM ESPAÇO DE COR HSV
+    svm_linear_hsv  = SVM(nome="SVM_Linear_HSV",   kernel='linear',    cor_space='HSV')
+    svm_rbf_hsv     = SVM(nome="SVM_RBF_HSV",      kernel='rbf',       cor_space='HSV')
+    svm_poly_hsv    = SVM(nome="SVM_POLY_HSV",     kernel='poly',      cor_space='HSV')
+    svm_sigmoid_hsv = SVM(nome="SVM_SIGMOID_HSV",  kernel='sigmoid',   cor_space='HSV')
+
+
+    #svm.train_data(laranja+jseg_sem_linha, laranjaInfectada+jseg_sem_linha, 'linear')
+    #svm.train_data(laranja+kmeans, laranjaInfectada+kmeans, 'linear')
