@@ -11,7 +11,7 @@ Esse trabalho tem como objetivo geral a classificação de defeitos, presentes a
 
 Escolhemos três métodos de segmentação antes da classificação usando SVM
 - [JSEG]
-- [K-Means]
+- [K-Means] 
 - [gPb] NOT IMPLEMENTED
 
 Uma relação de falsos-aceitos e aceitos-falsos dentre os métodos de segmentação na classificação das frutas irá ser disposta no final.

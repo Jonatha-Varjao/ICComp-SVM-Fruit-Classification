@@ -9,7 +9,7 @@ Orientando: [Jonatha Varjão]
 ### Instalação
 - Crie o ambiente virtual
 ```sh
-$ virtualenv -p python3.7 nomeDoAmbiente
+$ virtualenv -p python3.6 nomeDoAmbiente
 ```
 
 - Ative o ambiente virtual
@@ -23,8 +23,8 @@ $ source bin/active
 
 ```sh
 (VirtualEnv_Folder)$ git clone https://gitlab.com/Varjao/ICComp-SVM-Fruit-Classification.git
-(VirtualEnv_Folder)$ pip3.7 install -r ICComp-SVM-Fruit-Classification/requirements.txt
-(VirtualEnv_Folder)$ python3.7 ICComp-SVM-Fruit-Classification/main.py
+(VirtualEnv_Folder)$ pip3.6 install -r ICComp-SVM-Fruit-Classification/requirements.txt
+(VirtualEnv_Folder)$ python3.6 ICComp-SVM-Fruit-Classification/main.py
 ```
 
 Baixe a Base de Dados [aqui]
