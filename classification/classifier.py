@@ -1,17 +1,22 @@
 # -*- coding: utf-8 -*-
-from PIL import Image
+import sys
+import os
+import time
+import itertools
+
+import matplotlib.pyplot as plt
+import numpy as np
+
 from io import StringIO
+from typing import List
+
+from PIL import Image
+
 from sklearn import svm
 from sklearn import metrics
 from sklearn import model_selection
 from sklearn.externals import joblib
-from typing import List
-import matplotlib.pyplot as plt
-import numpy as np
-import itertools
-import sys
-import os
-import time
+
 
 def plot_confusion_matrix(cm, classes,
                           normalize=False,
@@ -41,14 +46,27 @@ def plot_confusion_matrix(cm, classes,
     plt.savefig('confusion.png')
 
 """
-    Classificador SVM (kernel linear)
+    Classificador SVM (kernel parametrizado)
 """
 class SVM:
     """
         Classe representando classificador SVM
         para uma classificação binária.
     """    
+    def __init__(self, nome: str, kernel="linear", cor_space= "RGB"):
+        """
+            Construtor da Classe representando meu SVM
+            Args:
+            nome (str): nome do classificador - usado na hora de salvar o treino.
+            kernel (str): tipo do kernel do svm - linear, rbf, polynomial, sigmoid
+        """
+        self.nome = nome
+        self.kernel = kernel
+        self.color_space = cor_space
     
+    def __str__(self):
+        return "{} {} {}".format(self.nome, self.kernel, self.color_space)
+
     def train_data(self, path_a: str, path_b: str, print_metrics=True):
         """
             Treina o classificador. path_a e path_b devem ser paths de pastas. 
@@ -81,7 +99,7 @@ class SVM:
         # plotando o gráfico
         # plot_graph(y_train, y_test)
         # definindo uma busca para os melhores parametros 
-        parameters = {'kernel': ['linear'], 'C': [1, 10, 100, 1000],
+        parameters = {'kernel': [self.kernel], 'C': [1, 10, 100, 1000],
                 'gamma': [0.1, 0.01, 0.001, 0.0001]}
         # procura os melhores parametros para kernel linear variando o C e a gamma
         clf = model_selection.GridSearchCV(svm.SVC(), parameters, scoring='f1_macro', cv=10).fit(x_train, y_train)
@@ -95,7 +113,7 @@ class SVM:
             print('Parameters:', clf.best_params_)
             print()
             print('Best classifier score')
-            print(metrics.classification_report(y_test, prediciton))
+            print(metrics.classification_report(y_test, prediciton, digits=4))
             print()
             print('Confussion Matrix')
             print(metrics.confusion_matrix(y_test, prediciton))
@@ -104,21 +122,7 @@ class SVM:
             print(metrics.f1_score(y_test, prediciton, labels=np.unique(prediciton)))
         return classifier
 
-    # testa na mão com redução da base de dados
-    def test_folder(self, path: str, clf: object) -> List:
-        # gerar o vector de teste
-        teste = []
-        for root, _, files in os.walk(path):
-            for file_name in files:
-                file_path = os.path.join(root, file_name)
-                img_feature = self.process_image_file(file_path)
-                if img_feature:
-                    teste.append(img_feature)
-        # clf.predict( ,teste)
-        # testar com o classificador gerado (dando load?)
-        pass
-
-    def process_folder(self, path: str)-> List[List[float]]:
+    def process_folder(self, path: str) -> List[List[float]]:
         """
             Retorna o array de features para todas imagens em um diretório
 
@@ -149,13 +153,16 @@ class SVM:
         """
         try:
             image = Image.open(image_path)
-            return self.process_image(image)
+            if self.color_space == 'RGB':
+                return self.process_image_RGB(image)
+            else:
+                return self.process_image_HSV(image)                
         except IOError:
             return None
     
-    def process_image(self, image: object, blocks=4) -> List[float]:
+    def process_image_RGB(self, image: object, blocks=4) -> List[float]:
         """
-            Dado um objeto de imagem PIL, retorna seu feture vector.
+            Dado um objeto de imagem PIL, retorna seu feture vector em RGB.
 
             Args:
             image (PIL.Image): imagem a ser processada.
@@ -165,6 +172,7 @@ class SVM:
             lista (float): se sucesso retornar vetor de features, None senão
         """
         if not image.mode == 'RGB':
+            print("Imagem nao esta no modo rgb")
             return None
         feature = [0] * blocks * blocks * blocks
         pixel_count = 0
@@ -175,31 +183,88 @@ class SVM:
             idx = ridx + gidx * blocks + bidx * blocks * blocks
             feature[idx] += 1
             pixel_count += 1
+        print(f'vetor de features {feature}, tamanho: {len(feature)}')
         return [x/pixel_count for x in feature]
 
-    def save_trained_data(self, svm: object):
-        return joblib.dump(svm, 'trainedData.pkl')
+    def process_image_HSV(self, image: object, blocks=4)-> List[float]:
+        """
+            Dado um objeto de imagem PIL, retorna seu feture vector em HSV.
+
+            Args:
+            image (PIL.Image): imagem a ser processada.
+            blocks (int, optional): número de blocos pra ser dividido com o espaço HSV.
+
+            Returns:
+            lista (float): se sucesso retornar vetor de features, None senão
+        """
+        if not image.mode == 'RGB':
+            print("Imagem nao esta no modo rgb")
+            return None
+        feature = [0] * blocks * blocks * blocks
+        pixel_count = 0
+        for pixel in image.getdata():
+            ridx = int(pixel[0]/(256/blocks))
+            gidx = int(pixel[1]/(256/blocks))
+            bidx = int(pixel[2]/(256/blocks))
+            Max,Min = max(ridx,gidx,bidx), min(ridx,gidx,bidx)
+            Delta = Max-Min
+            if Delta == 0:
+                H = 0
+            elif Max == ridx:
+                H = 60 * ( ((gidx-bidx)/float(Delta)) % 6  ) 
+            elif Max == gidx:
+                H = 60 * ( ((bidx-ridx)/float(Delta)) + 2  ) 
+            elif Max == bidx:
+                H = 60 * ( ((ridx-gidx)/float(Delta)) + 4  ) 
+            if Max == 0:
+                S = 0
+            else:
+                S = Delta/Max
+            V = Max
+            idx = V * blocks * blocks
+            feature[idx] += 1
+            pixel_count += 1
+        return [x/pixel_count for x in feature]
+
+    def save_trained_data(self):
+        return joblib.dump(self, f'classification/trained_data/{self.nome}.pkl')
     
     def load_trainded_data(self, path: str):
         return joblib.load(path)
 
 
-# TODO:
-#   - Testar na mão se realmente o score é esse msm.....
-#   - Printar o SVM e seu suporte de vetor
-#   - Otimizar o Feature Vector das imagens
+def main():
+    start = time.time()
+    svm_linear_rgb  = SVM(nome="SVM_Linear_RGB",   kernel='linear',     cor_space='RGB')
+    svm_linear_rgb.train_data('../database/LaranjaTangerina/Segment_Images/jseg/colorida/sem_linha/',
+    '../database/LaranjaInfectada/Segment_Images/jseg/colorida/sem_linha/')
+    end = time.time()
+    print("tempo de treinamento LINEAR: ", end-start)
 
-if __name__ == '__main__':
+    start = time.time()
+    svm_rbf_rgb     = SVM(nome="SVM_RBF_RGB",      kernel='rbf',        cor_space='RGB')
+    svm_rbf_rgb.train_data('../database/LaranjaTangerina/Segment_Images/jseg/colorida/sem_linha/',
+    '../database/LaranjaInfectada/Segment_Images/jseg/colorida/sem_linha/')
+    end = time.time()
+    print("tempo de treinamento RBF: ", end-start)
     
     start = time.time()
-    classifier = SVM()
-    clf = classifier.train_data('database/LaranjaTangerina/Segment_Images/jseg/colorida/sem_linha/',
-    'database/LaranjaInfectada/Segment_Images/jseg/colorida/sem_linha/')
+    svm_poly_rgb    = SVM(nome="SVM_POLY_RGB",     kernel='poly', cor_space='RGB')
+    svm_poly_rgb.train_data('../database/LaranjaTangerina/Segment_Images/jseg/colorida/sem_linha/',
+    '../database/LaranjaInfectada/Segment_Images/jseg/colorida/sem_linha/')
     end = time.time()
+    print("tempo de treinamento POLY: ", end-start)
     
-    classifier.save_trained_data(clf)
-
-    print("tempo de treinamento: ", end-start)
+    start = time.time()
+    svm_sigmoid_rgb = SVM(nome="SVM_SIGMOID_RGB",  kernel='sigmoid',    cor_space='RGB')
+    svm_sigmoid_rgb.train_data('../database/LaranjaTangerina/Segment_Images/jseg/colorida/sem_linha/',
+                                '../database/LaranjaInfectada/Segment_Images/jseg/colorida/sem_linha/')
+    end = time.time()
+    print("tempo de treinamento SIGMOID: ", end-start)
+        
+    
+if __name__ == '__main__':
+    main()    
     # TODO:
     #   - Testar o modelo treinado.
     #   - gerar gráficos.
