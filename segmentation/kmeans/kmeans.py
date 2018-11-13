@@ -9,7 +9,7 @@ import os
     Implementação baseada na documentaçao do openCV:
     https://docs.opencv.org/3.0-beta/doc/py_tutorials/py_ml/py_kmeans/py_kmeans_opencv/py_kmeans_opencv.html
 '''
-class Segment:
+class Kmeans:
     """
         Classe representando segmentação usando clusterição
         por k-means
@@ -21,7 +21,7 @@ class Segment:
         """
         self.segments=segments
 
-    def kmeans(self,image):
+    def segmentation(self,image):
         """
             Segmentacao utilizando clustericao com kmeans
             do openCV
@@ -50,7 +50,7 @@ class Segment:
             if '.' in filename:
                 print(filename)
                 image = cv2.imread(folderName+"Extracted_Images/"+filename)  
-                label,result= self.kmeans(image)
+                label,result= self.segmentation(image)
                 #cv2.imshow("segmenteda",result)
                 cv2.imwrite(folderName + "Segment_Images/kmeans/Kmeans_" + filename, result)
                 # for cluster in range(seg.segments):
@@ -68,12 +68,12 @@ class Segment:
 
 if __name__ == "__main__":
     label = []
-    seg4 = Segment(4)
-    seg5 = Segment(5)
-    seg6 = Segment(6)
-    label, result4 = seg4.kmeans(cv2.imread(sys.argv[1]))
-    label, result5 = seg5.kmeans(cv2.imread(sys.argv[1]))
-    label, result6 = seg6.kmeans(cv2.imread(sys.argv[1]))
+    seg4 = Kmeans(4)
+    seg5 = Kmeans(5)
+    seg6 = Kmeans(6)
+    label, result4 = seg4.segmentation(cv2.imread(sys.argv[1]))
+    label, result5 = seg5.segmentation(cv2.imread(sys.argv[1]))
+    label, result6 = seg6.segmentation(cv2.imread(sys.argv[1]))
     
     cv2.imwrite("k4.jpg", result4)
     cv2.imwrite("k5.jpg", result5)
