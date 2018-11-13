@@ -5,10 +5,7 @@ from segmentation.jseg.jseg import Jseg
 from segmentation.rotulacao.rotulacao import Rotulacao
 from classification.classifier import SVM
 
-"""
-    Script Principal
-"""
-if __name__ == "__main__":
+def main():
     """ Paths da base de dados """
     manga            = 'database/Manga/'
     macaRoyal        = 'database/MacaRoyal/'
@@ -66,17 +63,20 @@ if __name__ == "__main__":
     """ CLASSIFICACAO DAS IMAGENS """
     
     #  CLASSIFICADORES TREINADOS COM ESPAÇO DE COR RGB
-    svm_linear_rgb  = SVM(nome="SVM_Linear_RGB",   kernel='linear',     cor_space='RGB')
-    svm_rbf_rgb     = SVM(nome="SVM_RBF_RGB",      kernel='rbf',        cor_space='RGB')
-    svm_poly_rgb    = SVM(nome="SVM_POLY_RGB",     kernel='polynomial', cor_space='RGB')
-    svm_sigmoid_rgb = SVM(nome="SVM_SIGMOID_RGB",  kernel='sigmoid',    cor_space='RGB')
+    # svm_linear_rgb  = SVM(nome="SVM_Linear_RGB",   kernel='linear',     cor_space='RGB')
+    # svm_rbf_rgb     = SVM(nome="SVM_RBF_RGB",      kernel='rbf',        cor_space='RGB')
+    # svm_poly_rgb    = SVM(nome="SVM_POLY_RGB",     kernel='polynomial', cor_space='RGB')
+    # svm_sigmoid_rgb = SVM(nome="SVM_SIGMOID_RGB",  kernel='sigmoid',    cor_space='RGB')
     
-    # CLASSIFICADORES TREINADOS COM ESPAÇO DE COR HSV
-    svm_linear_hsv  = SVM(nome="SVM_Linear_HSV",   kernel='linear',    cor_space='HSV')
-    svm_rbf_hsv     = SVM(nome="SVM_RBF_HSV",      kernel='rbf',       cor_space='HSV')
-    svm_poly_hsv    = SVM(nome="SVM_POLY_HSV",     kernel='poly',      cor_space='HSV')
-    svm_sigmoid_hsv = SVM(nome="SVM_SIGMOID_HSV",  kernel='sigmoid',   cor_space='HSV')
+    # # CLASSIFICADORES TREINADOS COM ESPAÇO DE COR HSV
+    # svm_linear_hsv  = SVM(nome="SVM_Linear_HSV",   kernel='linear',    cor_space='HSV')
+    # svm_rbf_hsv     = SVM(nome="SVM_RBF_HSV",      kernel='rbf',       cor_space='HSV')
+    # svm_poly_hsv    = SVM(nome="SVM_POLY_HSV",     kernel='poly',      cor_space='HSV')
+    # svm_sigmoid_hsv = SVM(nome="SVM_SIGMOID_HSV",  kernel='sigmoid',   cor_space='HSV')
 
 
     #svm.train_data(laranja+jseg_sem_linha, laranjaInfectada+jseg_sem_linha, 'linear')
     #svm.train_data(laranja+kmeans, laranjaInfectada+kmeans, 'linear')
+
+if __name__ == "__main__":
+    main()

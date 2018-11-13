@@ -113,3 +113,9 @@ class Extract:
 #TODO: FIX no error do imread / imwrite do openCV particularmente com só uma image até agora Orange-ICC_131.JPG
 #       - Algumas imagens (Orange-ICC_131.JPG) ñ consigo tirar o contorno usando sobel
 #       - Fix: Segmentar sem cropar ela....        
+
+def main():
+    pass
+
+if __name__ == "__main__": 
+    main()

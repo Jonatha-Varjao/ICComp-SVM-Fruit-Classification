@@ -175,12 +175,15 @@ class Rotulacao:
                         qtd_Pixels = 0
         return new_image
     
-        
-if __name__ == "__main__": 
+def main():
     obj = Rotulacao()
     imgOriginal = Image.open(sys.argv[1])
     #img.show()
-    #img_teste = obj.remover_linha_branca(obj.achar_area(obj.binarizar_imagem(imgOriginal), imgOriginal))
+    img_teste = obj.binarizar_imagem(imgOriginal)
+    img_teste.save("teste.jpg")
     #img_teste = obj.remover_linha_branca(img_teste)
     #img_teste = obj.remover_linha_branca(img_teste)
     #img_teste.show()
+
+if __name__ == "__main__": 
+    main()

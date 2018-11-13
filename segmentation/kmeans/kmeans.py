@@ -66,7 +66,7 @@ class Kmeans:
 #TODO   4: Ajeitar o problema do filename incluir o folder e interromper a segmentação
             # '.jpg' in String ( apesar que a solução tá bem clean)
 
-if __name__ == "__main__":
+def main():
     label = []
     seg4 = Kmeans(4)
     seg5 = Kmeans(5)
@@ -78,3 +78,6 @@ if __name__ == "__main__":
     cv2.imwrite("k4.jpg", result4)
     cv2.imwrite("k5.jpg", result5)
     cv2.imwrite("k6.jpg", result6)
+
+if __name__ == "__main__":
+    main()

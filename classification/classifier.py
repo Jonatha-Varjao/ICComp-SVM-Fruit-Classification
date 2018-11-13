@@ -53,7 +53,7 @@ class SVM:
         Classe representando classificador SVM
         para uma classificação binária.
     """    
-    def __init__(self, nome: str, kernel="linear", cor_space= "RGB"):
+    def __init__(self, nome: str, kernel="linear", color_space= "RGB"):
         """
             Construtor da Classe representando meu SVM
             Args:
@@ -62,24 +62,21 @@ class SVM:
         """
         self.nome = nome
         self.kernel = kernel
-        self.color_space = cor_space
+        self.color_space = color_space
     
     def __str__(self):
         return "{} {} {}".format(self.nome, self.kernel, self.color_space)
 
-    def train_data(self, path_a: str, path_b: str, print_metrics=True):
+    def get_data(self, path_a: str, path_b: str):
         """
-            Treina o classificador. path_a e path_b devem ser paths de pastas. 
-            path_a e path_b são processadas por process_folder().
+        Retorna os features vector da classes passadas
 
-            Args:
+        Args:
             path_a (str): diretório contendo imagens da classe A.
             path_b (str): diretório contendo imagens da classe B.
-            print_metrics  (boolean, optional): se True, printar estatísticas
-            sobre a perfomace do classificador.
-
-            Returns:
-            Um classificador (sklearn.svm.SVC).
+        
+        Returns:
+            x_train, x_test, y_traing, y_test das classes A,B respectivamente
         """
         if not os.path.isdir(path_a):
             raise IOError('%s não é um diretório' % path_a)
@@ -96,8 +93,22 @@ class SVM:
         # o set de teste vai conter 30% do total
         x_train, x_test, y_train, y_test = model_selection.train_test_split(data,
                 target, test_size=0.30)
+        return x_train, x_test, y_train, y_test
+
+    def train_data(self, x_train, x_test, y_train, y_test, print_metrics=True):
+        """
+            Treina o SVM com os respectivos features vector de cada classe passada.
+            
+            Args:
+            x_training, x_test são treinamento e test da classe x
+            y_training, y_test são treinamento e test da classe y
+            print_metrics  (boolean, optional): se True, printar estatísticas
+            sobre a perfomace do classificador.
+
+            Returns:
+            Um classificador (sklearn.svm.SVC).
+        """
         # plotando o gráfico
-        # plot_graph(y_train, y_test)
         # definindo uma busca para os melhores parametros 
         parameters = {'kernel': [self.kernel], 'C': [1, 10, 100, 1000],
                 'gamma': [0.1, 0.01, 0.001, 0.0001]}
@@ -114,7 +125,6 @@ class SVM:
             print()
             print('Best classifier score')
             print(metrics.classification_report(y_test, prediciton, digits=4))
-            print()
             print('Confussion Matrix')
             print(metrics.confusion_matrix(y_test, prediciton))
             print()
@@ -183,7 +193,7 @@ class SVM:
             idx = ridx + gidx * blocks + bidx * blocks * blocks
             feature[idx] += 1
             pixel_count += 1
-        print(f'vetor de features {feature}, tamanho: {len(feature)}')
+        # print(f'vetor de features {feature}, tamanho: {len(feature)}')
         return [x/pixel_count for x in feature]
 
     def process_image_HSV(self, image: object, blocks=4)-> List[float]:
@@ -224,6 +234,7 @@ class SVM:
             idx = V * blocks * blocks
             feature[idx] += 1
             pixel_count += 1
+        # print(f'vetor de features {feature}, tamanho: {len(feature)}')
         return [x/pixel_count for x in feature]
 
     def save_trained_data(self):
@@ -234,39 +245,17 @@ class SVM:
 
 
 def main():
-    start = time.time()
-    svm_linear_rgb  = SVM(nome="SVM_Linear_RGB",   kernel='linear',     cor_space='RGB')
-    svm_linear_rgb.train_data('../database/LaranjaTangerina/Segment_Images/jseg/colorida/sem_linha/',
+    svm_linear_rgb  = SVM(nome="SVM_Linear_RGB",   kernel='linear',     color_space='RGB')
+    x_train, x_test, y_train, y_test = svm_linear_rgb.get_data('../database/LaranjaTangerina/Segment_Images/jseg/colorida/sem_linha/',
     '../database/LaranjaInfectada/Segment_Images/jseg/colorida/sem_linha/')
-    end = time.time()
-    print("tempo de treinamento LINEAR: ", end-start)
-
-    start = time.time()
-    svm_rbf_rgb     = SVM(nome="SVM_RBF_RGB",      kernel='rbf',        cor_space='RGB')
-    svm_rbf_rgb.train_data('../database/LaranjaTangerina/Segment_Images/jseg/colorida/sem_linha/',
-    '../database/LaranjaInfectada/Segment_Images/jseg/colorida/sem_linha/')
-    end = time.time()
-    print("tempo de treinamento RBF: ", end-start)
-    
-    start = time.time()
-    svm_poly_rgb    = SVM(nome="SVM_POLY_RGB",     kernel='poly', cor_space='RGB')
-    svm_poly_rgb.train_data('../database/LaranjaTangerina/Segment_Images/jseg/colorida/sem_linha/',
-    '../database/LaranjaInfectada/Segment_Images/jseg/colorida/sem_linha/')
-    end = time.time()
-    print("tempo de treinamento POLY: ", end-start)
-    
-    start = time.time()
-    svm_sigmoid_rgb = SVM(nome="SVM_SIGMOID_RGB",  kernel='sigmoid',    cor_space='RGB')
-    svm_sigmoid_rgb.train_data('../database/LaranjaTangerina/Segment_Images/jseg/colorida/sem_linha/',
-                                '../database/LaranjaInfectada/Segment_Images/jseg/colorida/sem_linha/')
-    end = time.time()
-    print("tempo de treinamento SIGMOID: ", end-start)
+    svm_linear_rgb.train_data(x_train, x_test, y_train, y_test)
         
-    
+                                                                                                
 if __name__ == '__main__':
     main()    
     # TODO:
-    #   - Testar o modelo treinado.
-    #   - gerar gráficos.
-    #   - escrever o relatório. (enxer linguiça)
+    #   - Testar o modelo treinado.              DONE
+    #   - gerar gráficos.                        
+    #       - quais?
+    #   - escrever o relatório. (enxer linguiça) DONE
     #   - refatorar esta classe e o remover-linha-branca dos algoritmos de segmentacao.

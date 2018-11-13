@@ -40,20 +40,11 @@ class Jseg(Rotulacao):
                 image = self.remover_linha_branca(self.remover_linha_branca(self.achar_area(self.binarizar_imagem(jseg_image), extracted_image)))
                 image.save(folderName + "Segment_Images/jseg/colorida/sem_linha/" + filename)
 
-'''
-FIX: AUMENTAR A ÁREA DA IMAGEM CROPADA PARA MELHORAR A SEGMENTAÇÃO USANDO JSEG [FEITO]
-FIX: TESTAR COM SCALES DIFERENES NA HORA DE SEGMENTA:
-        -> 100: - NA HORA DA ROTULAÇÃO AS AREAS SE COLIDIRAM 
-                - AREAS ESCURAS NA IMAGEM SEGMENTADA 
-        -> 50: - IGUAL AO 100
-        -> 30: - IGUAL A0 100
-        -> 10: - IGUAL AO 100
-    #TODO EROSAO / DILATACAO NA HORA DA ROTULACAO (IMAGEM BINARIZADA) [FEITO]
-        - RESOLVEU O PROBLEMA DA COLORAÇÃO                            [FEITO]
-        - NA HORA DA ACHAR A NOVA COR TÔ PEGANDO A IMAGEM EXTRAÍDA    [FEITO]
-'''
-if __name__ == "__main__":    
+def main():
     image = Image.open(sys.argv[1])
     print(image)
     scaleFactor = sys.argv[2]
     call(["wine","segwin.exe","-i", sys.argv[1],"-t","6","-s",str(image.size[0]), str(image.size[1]),"-o", scaleFactor+sys.argv[1], "1", "-l", scaleFactor ])
+
+if __name__ == "__main__":    
+    main()
