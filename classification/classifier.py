@@ -17,6 +17,7 @@ from sklearn import metrics
 from sklearn import model_selection
 from sklearn.externals import joblib
 
+from utils.dynamic_filter import Filter
 
 def plot_confusion_matrix(cm, classes,
                           normalize=False,
