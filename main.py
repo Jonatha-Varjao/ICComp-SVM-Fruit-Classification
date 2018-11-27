@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from segmentation.extraction.extraction import Extract
-from segmentation.kmeans.kmeans import Segment
+from segmentation.kmeans.kmeans import Kmeans
 from segmentation.jseg.jseg import Jseg
 from segmentation.rotulacao.rotulacao import Rotulacao
 from classification.classifier import SVM
