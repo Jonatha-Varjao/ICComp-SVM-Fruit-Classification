@@ -15,7 +15,7 @@ class Kmeans:
         por k-means
     """
 
-    def __init__(self, segments = 4):
+    def __init__(self, segments = 10):
         """
             Utilizando K=4 como default
         """
@@ -47,7 +47,7 @@ class Kmeans:
             Segmentação da pasta contendo as imagens pre processadas 
         """
         for filename in os.listdir(folderName+"Extracted_Images/"):
-            if '.' in filename:
+            if filename.lower().endswith('.JPG') or filename.lower().endswith('.PNG') :
                 print(filename)
                 image = cv2.imread(folderName+"Extracted_Images/"+filename)  
                 label,result= self.segmentation(image)
@@ -56,7 +56,7 @@ class Kmeans:
                 # for cluster in range(seg.segments):
                 #     result=seg.extractComponent(image, label, cluster)
                 #     cv2.imwrite("Component_"+str(cluster)+"_"+imageString[0], result)
-        return result
+        #return result
 
 
 #TODO   1: Refatorar o código e otimizar o tempo.

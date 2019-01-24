@@ -101,7 +101,7 @@ class Extract:
         
     def extract_folder(self, folderName):
         for filename in os.listdir(folderName):
-            if '.' in filename:
+            if filename.lower().endswith('.JPG') or filename.lower().endswith('.PNG') :
                 print(filename)
                 image = self.crop_image(self.extract_countor(folderName+filename))
                 cv2.imwrite(folderName + "Extracted_Images/" + filename, image)
