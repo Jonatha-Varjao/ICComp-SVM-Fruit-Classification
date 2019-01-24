@@ -183,7 +183,6 @@ class SVM:
             lista (float): se sucesso retornar vetor de features, None senão
         """
         if not image.mode == 'RGB':
-            print("Imagem nao esta no modo rgb")
             return None
         feature = [0] * blocks * blocks * blocks
         pixel_count = 0
@@ -209,7 +208,6 @@ class SVM:
             lista (float): se sucesso retornar vetor de features, None senão
         """
         if not image.mode == 'RGB':
-            print("Imagem nao esta no modo rgb")
             return None
         feature = [0] * blocks * blocks * blocks
         pixel_count = 0
