@@ -16,10 +16,10 @@ def main():
     kmeans           = 'Segment_Images/kmeans/'
 
     """ Criação dos objetos """
-    #seg              = Segment()
-    #extraction       = Extract()
-    #jseg             = Jseg()
-    #colorir          = Rotulacao()
+    seg              = Kmeans()
+    extraction       = Extract()
+    jseg             = Jseg()
+    colorir          = Rotulacao()
     
     """ PRE-PROCESSAMENTO ( CROP DO BACKGROUND DA FRUTA ) """
     # Extração das frutas nas imagens
@@ -30,6 +30,8 @@ def main():
     # extraction.extract_folder(macaVerde)
 
     """ PROCESSAMENTO DAS IMAGENS (JSEG) """
+    #jseg.segment_folder(potholes)
+    
     #jseg.segment_folder(macaRoyal)
     #jseg.segment_folder(laranjaInfectada)
     #jseg.segment_folder(laranja)
