@@ -66,7 +66,7 @@ class SVM:
         self.color_space = color_space
     
     def __str__(self):
-        return "{} {} {}".format(self.nome, self.kernel, self.color_space)
+        return f'{self.nome} {self.nome} {self.color_space}'
 
     def get_data(self, path_a: str, path_b: str):
         """
